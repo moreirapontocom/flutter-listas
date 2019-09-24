@@ -30,6 +30,43 @@ class _HomeState extends State<Home> {
     return postagens;
   }
 
+  Future _salvar() async {
+
+    var _corpo = json.encode({
+      "userId": 1,
+      "id": 1,
+      "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    });
+
+    http.Response response = await http.post(urlBase + "/posts", headers: {
+        "Content-Type": "Application/json; charset=UTF-8"
+      },
+      body: _corpo
+    );
+
+    print("Resposta: " + response.statusCode.toString());
+    print("Resposta: " + response.body);
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Sucesso"),
+          content: Text("Dados salvos com sucesso"),
+          actions: <Widget>[
+            RaisedButton(
+              child: Text("Ok", style: TextStyle(color: Colors.white),),
+              color: Colors.blue,
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        );
+      }
+    );
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,24 +74,32 @@ class _HomeState extends State<Home> {
         title: Text("Listas"),
       ),
       body: Container(
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.all(0),
         child: Column(
           children: <Widget>[
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RaisedButton(
-                  child: Text("Atualizar"),
+                  child: Text("GET"),
                   onPressed: () {
                     setState(() => {}); // O setState aqui faz o loading aparecer sempre que clico pra atualizar
                     _recuperarPosts();
                   }
                 ),
                 RaisedButton(
-                  child: Text("Postar"),
-                  onPressed: () => print("postar"),
+                  child: Text("POST"),
+                  onPressed: () {
+                    setState(() => {});
+                    _salvar();
+                  },
                 ),
                 RaisedButton(
-                  child: Text("Remover"),
+                  child: Text("PUT"),
+                  onPressed: () => print("Atualizar"),
+                ),
+                RaisedButton(
+                  child: Text("DELETE"),
                   onPressed: () => print("remover"),
                 ),
               ],
